@@ -1,6 +1,11 @@
 const express = require("express");
 const app = express();
 
+
+// the routers for the api
+
+// home route
+// ====================================
 app.get("/", function (req, res) {
     res.send("home page");
     console.log("home page")
