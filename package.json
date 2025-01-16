@@ -1,0 +1,16 @@
+{
+  "name": "my-portifilio",
+  "version": "1.0.0",
+  "description": "this is my portifilio backend and it may not be used by anyone ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Oshevire Ejiro Jacob",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5",
+    "nodemon": "^3.1.9"
+  }
+}
