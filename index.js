@@ -1,3 +1,5 @@
+// required framework
+const Joi = require("joi");
 const express = require("express");
 const app = express();
 
@@ -34,11 +36,26 @@ app.get("/api/portifilio/:id", (req, res) => {
 
 // post route
 app.post("/api/portifilio", (req, res) => {
+
+    const schema = Joi.object({
+        name: Joi.string().min(2).required(),
+        Link: Joi.string().uri().label("site").required().allow(''),
+        description: Joi.string().max(200).required()
+    });
+
+    const result = schema.validate(req.body);
+    console.log(result)
+
+    if (result.error) {
+        res.status(400).send(result.error);
+        return;
+    }
+    //variable for the date 
     let now = new Date();
     let day = now.getUTCDay();
     let month = now.getUTCMonth();
     let year = now.getFullYear();
-
+    // date object
     const datenow = `${day}\ ${month}\ ${year}`;
     const portifiliois = {
         id: portifilio.length + 1,
