@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const portfilioschema = new mongoose.Schema({
     name: String,
-    link: String,
+    Link: String,
     description: String,
     image: String,
     date: {

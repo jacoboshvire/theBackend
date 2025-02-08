@@ -1,30 +1,45 @@
-const express = require("express");
+const express = require("express"),
+    Joi = require("joi");
+const Portfilio = require("../models/Portfilio.js")
 
 // setting router to router
 const router = express.Router()
 
 
-const portifilio = [
-    { name: "giftedhand", link: "gifthand.com", description: "this was goated site trust me", id: 1 },
-    { name: "newLink", link: "newLink.com", description: "new Link is great that a great site", id: 2 },
-    { name: "something", link: "something.com", description: "i got something for you just guest it? 😉", id: 3 },
-]
+// const portifilio = [
+//     { name: "giftedhand", link: "gifthand.com", description: "this was goated site trust me", id: 1 },
+//     { name: "newLink", link: "newLink.com", description: "new Link is great that a great site", id: 2 },
+//     { name: "something", link: "something.com", description: "i got something for you just guest it? 😉", id: 3 },
+// ]
 
-// the routers for the api
+router.use(express.json());
+
+// the routers for the api    
 
 
 /*other router
 ===================================*/
 
 router.get("/", (req, res) => {
-    res.send(portifilio)
+    Portfilio.find().then((Portfilio) => {
+        res.status(200).json({ Portfilio })
+    }).catch(e => {
+        res.status(500).json({ Error })
+        console.log(Error)
+    })
+
 })
 
 // for the veiw page
-router.get("/:id", (req, res) => {
-    const portifilios = portifilio.find(c => c.id == parseInt(req.params.id))
-    if (!portifilios) res.status(404).send("you have entered a wrong page")
-    res.send(portifilios)
+router.get("/:_id", (req, res) => {
+    // find post by id
+    Portfilio.findById(req.params._id).then((foundPortfilio) => {
+        // display post found with that id
+        res.status(200).json({ foundPortfilio })
+    }).catch(e => {
+        res.status(404).json({ Error }) //handling error
+    })
+
 })
 
 // post route
@@ -39,32 +54,23 @@ router.post("/", (req, res) => {
     const result = schema.validate(req.body);
     console.log(result)
 
-    if (result.error) {
-        res.status(400).send(result.error.details[0].message);
-        return;
-    }
-    //variable for the date 
-    let now = new Date();
-    let day = now.getDay();
-    let month = now.getMonth();
-    let year = now.getFullYear();
-    // date object
-    const datenow = `${day}\ ${month}\ ${year}`;
     const portifiliois = {
-        id: portifilio.length + 1,
         name: req.body.name,
         Link: req.body.Link,
         description: req.body.description,
-        date: datenow
     };
-    portifilio.push(portifiliois);
-    res.send(portifilio)
+    const portfilio = new Portfilio(portifiliois)
+    portfilio.save().then(() => {
+        res.status(200).json({ portfilio })
+    }).catch(() => {
+        res.status(400).json(result.error.details[0].message);
+    })
 })
 
 //updating the post route
 // =======================================
-router.put("/:id", (req, res) => {
-    const portifilios = portifilio.find(c => c.id == parseInt(req.params.id))
+router.put("/:_id", (req, res) => {
+    const portifilios = portifilio.find(c => c.id == parseInt(req.params._id))
     if (!portifilios) return res.status(404).send("you have entered a wrong page")
 
     const schema = Joi.object({
@@ -77,7 +83,7 @@ router.put("/:id", (req, res) => {
     console.log(result)
 
     if (result.error) {
-        res.status(400).send(result.error.details[0].message);
+        res.status(400).json(result.error.details[0].message);
         return;
     }
 
@@ -98,7 +104,7 @@ router.put("/:id", (req, res) => {
 
     // resend the updated portfilio
     // =========================================
-    res.send(portifilios)
+    res.status(200).json({ portifilios })
 })
 
 // delete router for portfilio
