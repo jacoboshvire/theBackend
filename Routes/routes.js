@@ -1,6 +1,8 @@
 const express = require("express"),
     Joi = require("joi"),
-    Portfilio = require("../models/Portfilio.js")
+    Portfilio = require("../models/Portfilio.js"),
+    cloudinary = require("../utils/cloudinary.js"),
+    upload = require("../utils/mutler.js")
 
 // setting router to router
 const router = express.Router()
@@ -99,7 +101,7 @@ router.put("/:_id", (req, res) => {
     // portifilios.Link = req.body.Link;
     // portifilios.description = req.body.description;
 
-    Portfilio.findByIdAndUpdate(req.params._id, req.body).then((portifilios) => {
+    Portfilio.findByIdAndUpdate(req.params._id, req.body).then((portifilios, result) => {
         // resend the updated portfilio
         // =========================================
         res.status(200).json({ portifilios })
@@ -112,7 +114,7 @@ router.put("/:_id", (req, res) => {
 })
 
 // delete router for portfilio
-router.delete('/:id', (req, res) => {
+router.delete('/:_id', (req, res) => {
     // find the portfilio
     const portifilios = Portfilio.findById(req.params._id)
 
@@ -120,12 +122,13 @@ router.delete('/:id', (req, res) => {
     if (!portifilios) return res.status(404).send("you have entered a wrong page")
 
     //delete the portfilio if it exist
-    Portfilio.findByIdAndDelete(req.params._id).then(() => {
+    Portfilio.findByIdAndDelete(req.params._id).then((portifiliois) => {
         return res.status(200).json({
             //return success message
-            "success": "portfilio has being successfully deleted"
+            "success": "portfilio has being successfully deleted",
+            portifiliois
         });
-    }).catch(e => res.status(400).json(e.massege))
+    }).catch(e => res.status(400).json(e.message))
 
 
 })
