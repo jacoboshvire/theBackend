@@ -1,16 +1,9 @@
 const express = require("express"),
-    Joi = require("joi");
-const Portfilio = require("../models/Portfilio.js")
+    Joi = require("joi"),
+    Portfilio = require("../models/Portfilio.js")
 
 // setting router to router
 const router = express.Router()
-
-
-// const portifilio = [
-//     { name: "giftedhand", link: "gifthand.com", description: "this was goated site trust me", id: 1 },
-//     { name: "newLink", link: "newLink.com", description: "new Link is great that a great site", id: 2 },
-//     { name: "something", link: "something.com", description: "i got something for you just guest it? 😉", id: 3 },
-// ]
 
 router.use(express.json());
 
@@ -44,33 +37,46 @@ router.get("/:_id", (req, res) => {
 
 // post route
 router.post("/", (req, res) => {
+    //paramsing the data to create new one
+    const portifiliois = {
+        name: req.body.name,
+        Link: req.body.Link,
+        description: req.body.description,
+    };
 
+    // variable for error
+    let result
+
+    //creating new portfilios
+    const portfilio = new Portfilio(portifiliois)
+
+    // error validation
     const schema = Joi.object({
         name: Joi.string().min(2).required(),
         Link: Joi.string().uri().label("site").required().allow(''),
         description: Joi.string().min(200).max(3000).required()
     });
 
-    const result = schema.validate(req.body);
-    console.log(result)
+    //setting result to the schema for the error validation above
+    result = schema.validate(req.body);
 
-    const portifiliois = {
-        name: req.body.name,
-        Link: req.body.Link,
-        description: req.body.description,
-    };
-    const portfilio = new Portfilio(portifiliois)
-    portfilio.save().then(() => {
-        res.status(200).json({ portfilio })
-    }).catch(() => {
-        res.status(400).json(result.error.details[0].message);
-    })
+
+    if (!result.error || e) {    //checking for error in the newing created post
+        portfilio.save()    //if no error save the post to monogodb
+        return res.status(200).json({ portfilio })
+    } else {
+        console.log(result)
+        console.log(e.massege)
+        // error message
+        return res.status(400).json(result.error.details[0].message);
+    }
+
 })
 
 //updating the post route
 // =======================================
 router.put("/:_id", (req, res) => {
-    const portifilios = portifilio.find(c => c.id == parseInt(req.params._id))
+    const portifilios = Portfilio.findById(req.body.params)
     if (!portifilios) return res.status(404).send("you have entered a wrong page")
 
     const schema = Joi.object({
@@ -87,40 +93,40 @@ router.put("/:_id", (req, res) => {
         return;
     }
 
-    //variable for the date 
-    let now = new Date();
-    let day = now.getDay();
-    let month = now.getMonth();
-    let year = now.getFullYear();
-    // date object
-    const datenow = `edited ' ${day}\ ${month}\ ${year}'`;
-
     /*update the portfilio
-    =========================================*/
-    portifilios.name = req.body.name;
-    portifilios.Link = req.body.Link;
-    portifilios.description = req.body.description;
-    portifilios.date = datenow
+    // =========================================*/
+    // portifilios.name = req.body.name;
+    // portifilios.Link = req.body.Link;
+    // portifilios.description = req.body.description;
 
-    // resend the updated portfilio
-    // =========================================
-    res.status(200).json({ portifilios })
+    Portfilio.findByIdAndUpdate(req.params._id, req.body).then((portifilios) => {
+        // resend the updated portfilio
+        // =========================================
+        res.status(200).json({ portifilios })
+    })
+        .catch((e) => {
+            res.status(500).json(e.message)
+        })
+
+
 })
 
 // delete router for portfilio
 router.delete('/:id', (req, res) => {
     // find the portfilio
-    const portifilios = portifilio.find(c => c.id == parseInt(req.params.id))
+    const portifilios = Portfilio.findById(req.params._id)
 
     //if the post is not existing return 404 error
     if (!portifilios) return res.status(404).send("you have entered a wrong page")
 
     //delete the portfilio if it exist
-    const index = portifilio.indexOf(portifilios);
-    portifilio.splice(index, 1);
+    Portfilio.findByIdAndDelete(req.params._id).then(() => {
+        return res.status(200).json({
+            //return success message
+            "success": "portfilio has being successfully deleted"
+        });
+    }).catch(e => res.status(400).json(e.massege))
 
-    //back to portfilios
-    res.send(portifilio)
 
 })
 
