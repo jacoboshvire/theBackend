@@ -5,13 +5,12 @@ const multer = require("multer"),
 
 module.exports = multer({
     storage: multer.diskStorage({}),
-    fileFilter: (req, cd, file) => {
-        let ext
-        ext = path.extname(`${file.originalname} ${Math.random() * 23457}`);
+    fileFilter: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
         if (ext !== ".jpg" && ext !== ".png" && ext !== ".jpng") {
-            cb(new Error("this website doesn't support the file"), false);
-            return;
+            return cb(new Error("this website doesn't support the file"), false);
+
         }
-        cd(null, true)
+        cb(null, true)
     }
 })

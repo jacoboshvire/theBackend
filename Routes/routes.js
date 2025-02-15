@@ -31,19 +31,35 @@ router.get("/:_id", (req, res) => {
     Portfilio.findById(req.params._id).then((foundPortfilio) => {
         // display post found with that id
         res.status(200).json({ foundPortfilio })
+
     }).catch(e => {
         res.status(404).json({ Error }) //handling error
     })
 
 })
 
+router.post("/test", upload.single("image"), async (req, res) => {
+    try {
+        //connecting to cloudinary
+        const fileresult = await cloudinary.uploader.upload(req.file.path)
+        res.status(200).json({ fileresult })
+        console.log(fileresult)
+    } catch (err) {
+        res.status(500).json({ err })
+    }
+})
+
 // post route
-router.post("/", (req, res) => {
+router.post("/", upload.single("image"), async (req, res) => {
+    //connecting to cloudinary
+    const fileresult = await cloudinary.uploader.upload(req.file.path)
+
     //paramsing the data to create new one
     const portifiliois = {
         name: req.body.name,
         Link: req.body.Link,
         description: req.body.description,
+        image: fileresult.secure_url
     };
 
     // variable for error
@@ -56,19 +72,19 @@ router.post("/", (req, res) => {
     const schema = Joi.object({
         name: Joi.string().min(2).required(),
         Link: Joi.string().uri().label("site").required().allow(''),
-        description: Joi.string().min(200).max(3000).required()
+        description: Joi.string().min(200).max(3000).required(),
+        image: Joi.string()
     });
 
     //setting result to the schema for the error validation above
     result = schema.validate(req.body);
 
 
-    if (!result.error || e) {    //checking for error in the newing created post
+    if (!result.error) {    //checking for error in the newing created post
         portfilio.save()    //if no error save the post to monogodb
         return res.status(200).json({ portfilio })
     } else {
         console.log(result)
-        console.log(e.massege)
         // error message
         return res.status(400).json(result.error.details[0].message);
     }
