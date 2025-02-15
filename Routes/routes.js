@@ -78,16 +78,27 @@ router.post("/", upload.single("image"), async (req, res) => {
 
     //setting result to the schema for the error validation above
     result = schema.validate(req.body);
-
-
-    if (!result.error) {    //checking for error in the newing created post
-        portfilio.save()    //if no error save the post to monogodb
-        return res.status(200).json({ portfilio })
-    } else {
-        console.log(result)
-        // error message
+    if (result.error) {
         return res.status(400).json(result.error.details[0].message);
+    };
+
+
+    if (!portifiliois.image.match(/\.(jpg|jpeg|png|gif|dmp|webp|ico|tiff|xbm|tif|pjp|pjpeg|jfif)$/i)) {    //checking for error in the newing created post
+
+        // error message
+        return res.status(400).json({
+            "error": "file type don't match"
+        })
+
     }
+
+
+    portfilio.save().then((portfilio) => {
+        return res.status(200).json({ portfilio })
+    })    //if no error save the post to monogodb
+        .catch((e) => {
+            return res.status(400).json(e.message)
+        })
 
 })
 
