@@ -24,7 +24,7 @@ mongoose.Promise = Promise;
 
 // home route
 // ====================================
-app.use("/api/portifilio", require("./Routes/routes.js"));
+app.use("/", require("./Routes/routes.js"));
 
 
 // creating the port
