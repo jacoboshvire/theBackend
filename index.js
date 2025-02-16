@@ -17,7 +17,8 @@ app.use(express.json());
  * connecting mongoose to mongodb
  * ======================================
  */
-mongoose.connect(`mongodb+srv://${process.env.MONGODBUSER}:${process.env.PASSWORD}@${process.env.DATABASE}.evrnq.mongodb.net/`);
+
+mongoose.connect(`mongodb+srv://${process.env.MONGODBUSER}:${process.env.PASSWORD}@${process.env.DATABASE}.zasju.mongodb.net/`);
 mongoose.Promise = Promise;
 
 
