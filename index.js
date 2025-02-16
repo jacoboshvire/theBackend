@@ -24,11 +24,18 @@ mongoose.Promise = Promise;
 
 // home route
 // ====================================
-app.use("/", require("./Routes/routes.js"));
+app.use("/api/portifilio", require("./Routes/routes.js"));
+
+app.get("/", (req, res) => {
+    if (err) {
+        return res.status(500).send("error", err)
+    }
+    return res.status(200).send("hello")
+})
 
 
 // creating the port
-port = process.env.PORT,
+port = process.env.PORT || 8080,
     app.listen(port, function () {
         console.log(`app is running ${port}`)
     }) 
