@@ -27,9 +27,9 @@ mongoose.Promise = Promise;
 app.use("/api/portifilio", require("./Routes/routes.js"));
 
 app.get("/", (req, res) => {
-    if (err) {
-        return res.status(500).send("error", err)
-    }
+    // if (Error) {
+    //     return res.status(500).send("error")
+    // }
     return res.status(200).send("hello")
 })
 
