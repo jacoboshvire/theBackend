@@ -8,8 +8,8 @@
     ],
     "routes": [
         {
-            "src": "/api/portifilio/(.*)",
-            "dest": "/api/portifilio/"
+            "src": "/(.*)",
+            "dest": "/"
         }
     ]
 }
