@@ -35,7 +35,7 @@ app.get("/", (req, res) => {
 
 
 // creating the port
-port = process.env.PORT || 8080,
-    app.listen(port, function () {
-        console.log(`app is running ${port}`)
-    }) 
+const port = process.env.PORT || 4000;
+app.listen(port, function () {
+    console.log(`app is running ${port}`)
+}) 
