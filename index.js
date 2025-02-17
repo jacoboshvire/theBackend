@@ -4,13 +4,15 @@ const Joi = require("joi"),
     app = express(),
     mongoose = require("mongoose"),
     Portfilio = require("./models/Portfilio"),
-    dotenv = require("dotenv")
+    dotenv = require("dotenv"),
+    cros = require("cros")
 
 //environment variable
 dotenv.config();
 
 
 app.use(express.json());
+app.use(cros());
 
 /**
  * ======================================
