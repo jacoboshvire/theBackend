@@ -12,7 +12,7 @@ dotenv.config();
 
 
 app.use(express.json());
-app.use(cros());
+app.use(cros())
 
 /**
  * ======================================
