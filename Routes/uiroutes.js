@@ -30,6 +30,7 @@ router.post("/", upload.single("image"), async (req, res) => {
     const uidesigns = {
         name: req.body.name,
         description: req.body.description,
+        figmalink: req.body.figmalink,
         image: fileresult.secure_url, //image = file secure url at cloudinary
         imagewidth: fileresult.width,
         imageheight: fileresult.height
@@ -45,7 +46,8 @@ router.post("/", upload.single("image"), async (req, res) => {
     const schema = Joi.object({
         name: Joi.string().min(2).required(),
         description: Joi.string().min(200).max(3000).required(),
-        image: Joi.string()
+        image: Joi.string(),
+        figmalink: Joi.string().uri().label("figma link").required().allow(''),
     });
 
     //setting result to the schema for the error validation above
