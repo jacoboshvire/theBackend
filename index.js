@@ -4,8 +4,8 @@ const Joi = require("joi"),
     app = express(),
     mongoose = require("mongoose"),
     Portfilio = require("./models/Portfilio"),
-    dotenv = require("dotenv")
-cors = require("cors")
+    dotenv = require("dotenv"),
+    cors = require("cors")
 
 //environment variable
 dotenv.config();
@@ -27,6 +27,14 @@ mongoose.Promise = Promise;
 // home route
 // ====================================
 app.use("/api/portifilio", require("./Routes/routes.js"));
+
+// graphics routes
+// ===============================================
+app.use("/api/graphics", require("./Routes/graphicsroute.js"));
+
+// uidesign routes
+// -----------------------------------------------------
+app.use("/api/uidesign", require("./Routes/uiroutes.js"));
 
 app.get("/", (req, res) => {
     // if (Error) {

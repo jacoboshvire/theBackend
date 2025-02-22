@@ -59,7 +59,9 @@ router.post("/", upload.single("image"), async (req, res) => {
         name: req.body.name,
         Link: req.body.Link,
         description: req.body.description,
-        image: fileresult.secure_url //image = file secure url at cloudinary
+        image: fileresult.secure_url, //image = file secure url at cloudinary
+        imagewidth: fileresult.width,
+        imageheight: fileresult.height
     };
 
     // variable for error
