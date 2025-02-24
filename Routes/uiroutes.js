@@ -2,7 +2,8 @@ const express = require("express"),
     Joi = require("joi"),
     Uidesign = require("../models/uidesign.js"),
     cloudinary = require("../utils/cloudinary.js"),
-    upload = require("../utils/mutler.js")
+    upload = require("../utils/mutler.js"),
+    path = require("path")
 
 // setting router to router
 const router = express.Router()
@@ -25,6 +26,7 @@ router.get("/", (req, res) => {
 router.post("/", upload.single("image"), async (req, res) => {
     //connecting to cloudinary
     const fileresult = await cloudinary.uploader.upload(req.file.path)
+    const arraytool = req.body.tools.split(",")
 
     //paramsing the data to create new one
     const uidesigns = {
@@ -33,7 +35,8 @@ router.post("/", upload.single("image"), async (req, res) => {
         figmalink: req.body.figmalink,
         image: fileresult.secure_url, //image = file secure url at cloudinary
         imagewidth: fileresult.width,
-        imageheight: fileresult.height
+        imageheight: fileresult.height,
+        tools: arraytool
     };
 
     // variable for error
@@ -47,6 +50,7 @@ router.post("/", upload.single("image"), async (req, res) => {
         name: Joi.string().min(2).required(),
         description: Joi.string().min(200).max(3000).required(),
         image: Joi.string(),
+        tools: Joi.string(),
         figmalink: Joi.string().uri().label("figma link").required().allow(''),
     });
 

@@ -31,7 +31,8 @@ router.post("/", upload.single("image"), async (req, res) => {
         description: req.body.description,
         image: fileresult.secure_url, //image = file secure url at cloudinary
         imagewidth: fileresult.width,
-        imageheight: fileresult.height
+        imageheight: fileresult.height,
+        tools: req.body.tools.split(",")
     };
 
     // variable for error
@@ -44,7 +45,8 @@ router.post("/", upload.single("image"), async (req, res) => {
     const schema = Joi.object({
         name: Joi.string().min(2).required(),
         description: Joi.string().min(200).max(3000).required(),
-        image: Joi.string()
+        image: Joi.string(),
+        tools: Joi.string(),
     });
 
     //setting result to the schema for the error validation above

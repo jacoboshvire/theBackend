@@ -38,17 +38,6 @@ router.get("/:_id", (req, res) => {
 
 })
 
-router.post("/test", upload.single("image"), async (req, res) => {
-    try {
-        //connecting to cloudinary
-        const fileresult = await cloudinary.uploader.upload(req.file.path)
-        res.status(200).json({ fileresult })
-        console.log(fileresult)
-    } catch (err) {
-        res.status(500).json({ err })
-    }
-})
-
 // post route
 router.post("/", upload.single("image"), async (req, res) => {
     //connecting to cloudinary
@@ -61,7 +50,8 @@ router.post("/", upload.single("image"), async (req, res) => {
         description: req.body.description,
         image: fileresult.secure_url, //image = file secure url at cloudinary
         imagewidth: fileresult.width,
-        imageheight: fileresult.height
+        imageheight: fileresult.height,
+        tools: req.body.tools.split(",")
     };
 
     // variable for error
@@ -75,7 +65,8 @@ router.post("/", upload.single("image"), async (req, res) => {
         name: Joi.string().min(2).required(),
         Link: Joi.string().uri().label("site").required().allow(''),
         description: Joi.string().min(200).max(3000).required(),
-        image: Joi.string()
+        image: Joi.string(),
+        tools: Joi.string(),
     });
 
     //setting result to the schema for the error validation above

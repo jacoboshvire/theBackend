@@ -7,6 +7,10 @@ const uidesignSchema = new mongoose.Schema({
     imageheight: Number,
     image: String,
     figmalink: String,
+    tools: {
+        type: Array,
+        default: [""]
+    },
     date: {
         type: Date,
         default: Date.now

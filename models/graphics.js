@@ -6,6 +6,10 @@ const graphicSchema = new mongoose.Schema({
     imagewidth: Number,
     imageheight: Number,
     description: String,
+    tools: {
+        type: Array,
+        dafault: [""]
+    },
     date: {
         type: Date,
         default: Date.now
