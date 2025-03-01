@@ -2,7 +2,8 @@ const express = require("express"),
     Joi = require("joi"),
     Graphics = require("../models/graphics.js"),
     cloudinary = require("../utils/cloudinary.js"),
-    upload = require("../utils/mutler.js")
+    upload = require("../utils/mutler.js"),
+    path = require("path")
 
 // setting router to router
 const router = express.Router()

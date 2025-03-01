@@ -6,7 +6,7 @@ const portfilioschema = new mongoose.Schema({
     description: String,
     tools: {
         type: Array,
-        default: [""]
+        default: []
     },
     image: String,
     imagewidth: Number,
