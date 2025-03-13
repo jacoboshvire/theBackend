@@ -26,7 +26,7 @@ router.get("/", (req, res) => {
 router.post("/", upload.single("image"), async (req, res) => {
     //connecting to cloudinary
     const fileresult = await cloudinary.uploader.upload(req.file.path)
-    const arraytool = req.body.tools.split("-")
+    const arraytool = req.body.tools.split(",")
 
     //paramsing the data to create new one
     const uidesigns = {
