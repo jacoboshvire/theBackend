@@ -73,7 +73,7 @@ router.post("/", upload.single("image"), async (req, res) => {
         .catch((e) => {
             return res.status(400).json(e.message)
         })
-})
+});
 
 // find by id
 // ------------------------------------------------
